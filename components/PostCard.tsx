@@ -4,9 +4,10 @@ import { Post } from '@/types';
 
 interface PostCardProps {
   post: Post;
+  showAuthor?: boolean;
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, showAuthor = false }: PostCardProps) {
   const formatDate = (dateString: string | null): string => {
     if (!dateString) return '';
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -56,6 +57,15 @@ export default function PostCard({ post }: PostCardProps) {
             <span>Read more</span>
           </div>
         </div>
+
+        {showAuthor && (
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <span>👤</span>
+              <span>Author information would go here</span>
+            </div>
+          </div>
+        )}
       </div>
     </article>
   );

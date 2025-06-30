@@ -1,7 +1,10 @@
 // components/EventFilter.tsx
 'use client';
 
+import { Event } from '@/types';
+
 interface EventFilterProps {
+  events: Event[];
   selectedType: string;
   selectedStatus: string;
   onTypeChange: (type: string) => void;
@@ -26,6 +29,7 @@ const eventStatuses = [
 ];
 
 export default function EventFilter({ 
+  events,
   selectedType, 
   selectedStatus, 
   onTypeChange, 
@@ -72,6 +76,12 @@ export default function EventFilter({
           </select>
         </div>
       </div>
+
+      {events.length > 0 && (
+        <div className="mt-4 text-sm text-gray-600">
+          Showing {events.length} event{events.length !== 1 ? 's' : ''}
+        </div>
+      )}
     </div>
   );
 }
