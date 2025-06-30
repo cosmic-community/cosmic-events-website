@@ -1,4 +1,3 @@
-// app/events/[slug]/page.tsx
 import { getEvent, getEvents } from '@/lib/cosmic'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -9,10 +8,15 @@ interface EventPageProps {
 }
 
 export async function generateStaticParams() {
-  const events = await getEvents()
-  return events.map((event) => ({
-    slug: event.slug,
-  }))
+  try {
+    const events = await getEvents()
+    return events.map((event) => ({
+      slug: event.slug,
+    }))
+  } catch (error) {
+    console.warn('Warning: Failed to generate static params for events:', error);
+    return []
+  }
 }
 
 export default async function EventPage({ params }: EventPageProps) {

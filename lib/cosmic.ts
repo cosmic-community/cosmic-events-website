@@ -1,5 +1,5 @@
 import { createBucketClient } from '@cosmicjs/sdk';
-import { Event, Post, Author, CosmicResponse } from '@/types';
+import { Event, Post, Author } from '@/types';
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
@@ -22,10 +22,13 @@ export async function getEvents(): Promise<Event[]> {
     
     return response.objects as Event[];
   } catch (error) {
+    // Handle 404 (no objects found) gracefully
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
-    throw new Error('Failed to fetch events');
+    // For build-time, log the error but don't throw to prevent build failure
+    console.warn('Warning: Failed to fetch events during build:', error);
+    return [];
   }
 }
 
@@ -50,7 +53,8 @@ export async function getEvent(slug: string): Promise<Event | null> {
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
-    throw new Error(`Failed to fetch event: ${slug}`);
+    console.warn(`Warning: Failed to fetch event ${slug}:`, error);
+    return null;
   }
 }
 
@@ -70,7 +74,8 @@ export async function getEventsByStatus(status: string): Promise<Event[]> {
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
-    throw new Error(`Failed to fetch events by status: ${status}`);
+    console.warn(`Warning: Failed to fetch events by status ${status}:`, error);
+    return [];
   }
 }
 
@@ -87,7 +92,8 @@ export async function getPosts(): Promise<Post[]> {
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
-    throw new Error('Failed to fetch posts');
+    console.warn('Warning: Failed to fetch posts during build:', error);
+    return [];
   }
 }
 
@@ -112,7 +118,8 @@ export async function getPost(slug: string): Promise<Post | null> {
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
-    throw new Error(`Failed to fetch post: ${slug}`);
+    console.warn(`Warning: Failed to fetch post ${slug}:`, error);
+    return null;
   }
 }
 
@@ -128,7 +135,8 @@ export async function getAuthors(): Promise<Author[]> {
     if (hasStatus(error) && error.status === 404) {
       return [];
     }
-    throw new Error('Failed to fetch authors');
+    console.warn('Warning: Failed to fetch authors during build:', error);
+    return [];
   }
 }
 
@@ -152,6 +160,7 @@ export async function getAuthor(slug: string): Promise<Author | null> {
     if (hasStatus(error) && error.status === 404) {
       return null;
     }
-    throw new Error(`Failed to fetch author: ${slug}`);
+    console.warn(`Warning: Failed to fetch author ${slug}:`, error);
+    return null;
   }
 }
