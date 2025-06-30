@@ -1,5 +1,5 @@
+// app/events/page.tsx
 import { getEvents } from '@/lib/cosmic'
-import EventCard from '@/components/EventCard'
 import EventFilter from '@/components/EventFilter'
 
 export default async function EventsPage() {
